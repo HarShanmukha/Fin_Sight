@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./pathway_server
+      dockerfile: Dockerfile.api
+    container_name: finsight-backend
+    ports:
+      - "4112:8000"
+    volumes:
+      - ./pathway_server/data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./pathway_client
+      dockerfile: Dockerfile
+    container_name: finsight-frontend
+    ports:
+      - "4111:5173"
+    environment:
+      - VITE_API_URL=https://api.finsight.deepaksilaych.me
+      - VITE_WS_URL=wss://api.finsight.deepaksilaych.me
+    depends_on:
+      - backend
+    restart: unless-stopped
